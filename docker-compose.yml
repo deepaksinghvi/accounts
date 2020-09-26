@@ -1,0 +1,46 @@
+version: '3.3'
+services:
+  awspostgres:
+    image: postgres
+    container_name: awspostgres
+    restart: always
+    networks:
+      - mynet
+    expose:
+      - "5433"
+    environment:
+      POSTGRES_DB: acc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: awspostgres
+    # Where our data will be persisted
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+
+  accounts-app:
+    restart: on-failure
+    container_name: accounts
+    networks:
+      - mynet
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    ports:
+      - 8080:8080
+    environment:
+      POSTGRES_HOST: awspostgres:5433
+      SPRING_DATASOURCE_URL: jdbc:postgresql://awspostgres:5432/acc
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - awspostgres
+
+# Names our volume
+volumes:
+  db_data:
+networks:
+  mynet:
