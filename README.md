@@ -1,6 +1,4 @@
-#accounts
-
-##SpringBoot-Postgres-Docker-Kubernetes
+#SpringBoot-Postgres-Docker-Kubernetes
 SpringBoot Based Microservice\
 Depends on Postgres DB\
 Docker Image pushed to docker-hub\
